@@ -89,7 +89,7 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.fPowNoRetargeting = false;
+        consensus.fPowNoRetargeting = true;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
@@ -108,7 +108,7 @@ public:
 
         // The best chain should have at least this much work.
         // "0x0000000000000000000000000000000000000000028822fef1c230963535a90d"
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000100010001");
+        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000000000101");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000000002e63058c023a9a1de233554f28c7b21380b6c9003f36a8"); //534292
@@ -130,9 +130,9 @@ public:
         // assert(consensus.hashGenesisBlock == uint256S("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"));
         // assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
 
-        genesis = CreateGenesisBlock(1538752542, 727, 0x1f0fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541605335, 217, 0x1f0fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00025a8135429678bd02760720791d74ad2fa679840a237c62f80a70bfd3e1aa"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000aa7f2caf82c0fea9011cfcd3990e8fa4f85d5511021a8256072fcf8af8b4c"));
         assert(genesis.hashMerkleRoot == uint256S("0xc930203e9d1bfbd0cd3127a9936876b8b89bde0d657c01a94fc6ebb3e2660a91"));
 
         // Note that of those which support the service bits prefix, most only support a subset of
@@ -212,7 +212,7 @@ public:
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // two weeks
         consensus.nPowTargetSpacing = 10 * 60;
         consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.fPowNoRetargeting = false;
+        consensus.fPowNoRetargeting = true;
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
@@ -231,7 +231,7 @@ public:
 
         // The best chain should have at least this much work.
         // "0x00000000000000000000000000000000000000000000007dbe94253893cbd463"
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000100010001");
+        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000000010001");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75"); //1354312
@@ -248,9 +248,9 @@ public:
         // assert(consensus.hashGenesisBlock == uint256S("0x000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"));
         // assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
 
-        genesis = CreateGenesisBlock(1538752542, 727, 0x1f0fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541605406, 22, 0x1f0fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00025a8135429678bd02760720791d74ad2fa679840a237c62f80a70bfd3e1aa"));
+        assert(consensus.hashGenesisBlock == uint256S("0x00082d493c9f73956c54212a63b04667452b3cea40456dab6c65100886a614e3"));
         assert(genesis.hashMerkleRoot == uint256S("0xc930203e9d1bfbd0cd3127a9936876b8b89bde0d657c01a94fc6ebb3e2660a91"));
 
         vFixedSeeds.clear();
@@ -329,7 +329,7 @@ public:
         // The best chain should have at least this much work.
         // consensus.nMinimumChainWork = uint256S("0x00");
 
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000100010001");
+        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000000010001");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
@@ -341,14 +341,9 @@ public:
         nDefaultPort = 16444; //18444
         nPruneAfterHeight = 1000;
 
-        // genesis = CreateGenesisBlock(1296688602, 2, 0x207fffff, 1, 50 * COIN);
-        // consensus.hashGenesisBlock = genesis.GetHash();
-        // assert(consensus.hashGenesisBlock == uint256S("0x0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"));
-        // assert(genesis.hashMerkleRoot == uint256S("0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"));
-
-        genesis = CreateGenesisBlock(1538752542, 727, 0x1f0fffff, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1541605459, 2441, 0x1f0fffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00025a8135429678bd02760720791d74ad2fa679840a237c62f80a70bfd3e1aa"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000cf7c6d0fb3d2508b082c3ac88df2ba98ecc53c81288f69c306285f200b6c4"));
         assert(genesis.hashMerkleRoot == uint256S("0xc930203e9d1bfbd0cd3127a9936876b8b89bde0d657c01a94fc6ebb3e2660a91"));
 
 
