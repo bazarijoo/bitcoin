@@ -1174,11 +1174,11 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
 
 bool IsInitialBlockDownload()
 {
-    // Once this function has returned false, it must remain false.
+     // Once this function has returned false, it must remain false.
     static std::atomic<bool> latchToFalse{false};
     // Optimization: pre-test latch before taking the lock.
-    // if (latchToFalse.load(std::memory_order_relaxed))
-    //     return false;
+    if (latchToFalse.load(std::memory_order_relaxed))
+        return false;
 
     LOCK(cs_main);
     if (latchToFalse.load(std::memory_order_relaxed))
@@ -1193,7 +1193,7 @@ bool IsInitialBlockDownload()
         return true;
     LogPrintf("Leaving InitialBlockDownload (latching to false)\n");
     latchToFalse.store(true, std::memory_order_relaxed);
-    return false;
+return false;
 }
 
 CBlockIndex *pindexBestForkTip = nullptr, *pindexBestForkBase = nullptr;
