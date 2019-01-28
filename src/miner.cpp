@@ -24,6 +24,7 @@
 #include <util.h>
 #include <utilmoneystr.h>
 #include <validationinterface.h>
+#include <string> 
 
 #include <algorithm>
 #include <queue>
@@ -49,6 +50,7 @@ int64_t UpdateTime(CBlockHeader* pblock, const Consensus::Params& consensusParam
     if (consensusParams.fPowAllowMinDifficultyBlocks)
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, consensusParams);
 
+    LogPrintf("uodated time \n");
     return nNewTime - nOldTime;
 }
 
@@ -175,6 +177,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     CValidationState state;
     if (!TestBlockValidity(state, chainparams, *pblock, pindexPrev, false, false)) {
         throw std::runtime_error(strprintf("%s: TestBlockValidity failed: %s", __func__, FormatStateMessage(state)));
+        LogPrintf("TestBlockValidity failed\n");
     }
     int64_t nTime2 = GetTimeMicros();
 
@@ -189,9 +192,11 @@ void BlockAssembler::onlyUnconfirmed(CTxMemPool::setEntries& testSet)
         // Only test txs not already in the block
         if (inBlock.count(*iit)) {
             testSet.erase(iit++);
+            LogPrintf("Erased iit\n");
         }
         else {
             iit++;
+            LogPrintf("iit++\n");
         }
     }
 }
@@ -199,10 +204,15 @@ void BlockAssembler::onlyUnconfirmed(CTxMemPool::setEntries& testSet)
 bool BlockAssembler::TestPackage(uint64_t packageSize, int64_t packageSigOpsCost) const
 {
     // TODO: switch to weight-based accounting for packages instead of vsize-based accounting.
-    if (nBlockWeight + WITNESS_SCALE_FACTOR * packageSize >= nBlockMaxWeight)
+    if (nBlockWeight + WITNESS_SCALE_FACTOR * packageSize >= nBlockMaxWeight){
+        LogPrintf(" Test package failed: nBlockWeight + WITNESS_SCALE_FACTOR * packageSize >= nBlockMaxWeight\n");
         return false;
-    if (nBlockSigOpsCost + packageSigOpsCost >= MAX_BLOCK_SIGOPS_COST)
+    }
+    if (nBlockSigOpsCost + packageSigOpsCost >= MAX_BLOCK_SIGOPS_COST){
+        LogPrintf(" Test package failed: nBlockSigOpsCost + packageSigOpsCost >= MAX_BLOCK_SIGOPS_COST\n");
         return false;
+    }
+     LogPrintf(" Test package function returned successful in line 204!\n");
     return true;
 }
 
@@ -213,10 +223,14 @@ bool BlockAssembler::TestPackage(uint64_t packageSize, int64_t packageSigOpsCost
 bool BlockAssembler::TestPackageTransactions(const CTxMemPool::setEntries& package)
 {
     for (CTxMemPool::txiter it : package) {
-        if (!IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff))
+        if (!IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff)){
+            LogPrintf("Test package  transactions failedaused by : !IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff)\n");
             return false;
-        if (!fIncludeWitness && it->GetTx().HasWitness())
+        }
+        if (!fIncludeWitness && it->GetTx().HasWitness()){
+             LogPrintf("Test package  transactions failedaused by : !fIncludeWitness && it->GetTx().HasWitness()\n");
             return false;
+        }
     }
     return true;
 }
@@ -238,6 +252,8 @@ void BlockAssembler::AddToBlock(CTxMemPool::txiter iter)
                   CFeeRate(iter->GetModifiedFee(), iter->GetTxSize()).ToString(),
                   iter->GetTx().GetHash().ToString());
     }
+    LogPrintf("Transactions added to block\n");
+
 }
 
 int BlockAssembler::UpdatePackagesForAdded(const CTxMemPool::setEntries& alreadyAdded,
@@ -264,6 +280,8 @@ int BlockAssembler::UpdatePackagesForAdded(const CTxMemPool::setEntries& already
             }
         }
     }
+    std::string result = std::to_string(nDescendantsUpdated);
+    LogPrintf("nDescendantsUpdated returned %s\n",result);
     return nDescendantsUpdated;
 }
 
@@ -279,6 +297,8 @@ int BlockAssembler::UpdatePackagesForAdded(const CTxMemPool::setEntries& already
 bool BlockAssembler::SkipMapTxEntry(CTxMemPool::txiter it, indexed_modified_transaction_set &mapModifiedTx, CTxMemPool::setEntries &failedTx)
 {
     assert (it != mempool.mapTx.end());
+    std::string result = std:: to_string(mapModifiedTx.count(it) || inBlock.count(it) || failedTx.count(it));
+    LogPrintf("SkipMapTxEntry returnd %s\n",result);
     return mapModifiedTx.count(it) || inBlock.count(it) || failedTx.count(it);
 }
 
