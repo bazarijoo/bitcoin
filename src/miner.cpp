@@ -212,7 +212,7 @@ bool BlockAssembler::TestPackage(uint64_t packageSize, int64_t packageSigOpsCost
         LogPrintf(" Test package failed: nBlockSigOpsCost + packageSigOpsCost >= MAX_BLOCK_SIGOPS_COST\n");
         return false;
     }
-     LogPrintf(" Test package function returned successful in line 204!\n");
+     LogPrintf(" Test package function returned successful in line 215!\n");
     return true;
 }
 
@@ -224,14 +224,15 @@ bool BlockAssembler::TestPackageTransactions(const CTxMemPool::setEntries& packa
 {
     for (CTxMemPool::txiter it : package) {
         if (!IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff)){
-            LogPrintf("Test package  transactions failedaused by : !IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff)\n");
+            LogPrintf("Test package  transactions failed caused by : !IsFinalTx(it->GetTx(), nHeight, nLockTimeCutoff)\n");
             return false;
         }
         if (!fIncludeWitness && it->GetTx().HasWitness()){
-             LogPrintf("Test package  transactions failedaused by : !fIncludeWitness && it->GetTx().HasWitness()\n");
+             LogPrintf("Test package  transactions failed caused by : !fIncludeWitness && it->GetTx().HasWitness()\n");
             return false;
         }
     }
+    LogPrintf("Test package  transactions returned true in miner.cpp\n");
     return true;
 }
 
@@ -402,6 +403,7 @@ void BlockAssembler::addPackageTxs(int &nPackagesSelected, int &nDescendantsUpda
                 // Since we always look at the best entry in mapModifiedTx,
                 // we must erase failed entries so that we can consider the
                 // next best entry on the next loop iteration
+                LogPrintf("fUsingModified is true\n");
                 mapModifiedTx.get<ancestor_score>().erase(modit);
                 failedTx.insert(iter);
             }
@@ -411,11 +413,14 @@ void BlockAssembler::addPackageTxs(int &nPackagesSelected, int &nDescendantsUpda
             if (nConsecutiveFailed > MAX_CONSECUTIVE_FAILURES && nBlockWeight >
                     nBlockMaxWeight - 4000) {
                 // Give up if we're close to full and haven't succeeded in a while
+                LogPrintf("nConsecutiveFailed > MAX_CONSECUTIVE_FAILURES && nBlockWeight > nBlockMaxWeight - 4000. \\n ");
                 break;
             }
+            LogPrintf("returned to first of loop in miner.cpp line 421\\n ");
             continue;
         }
 
+        // LogPrintf("CalculateMemPoolAncestors returned %d in miner.cpp line 431", result);
         CTxMemPool::setEntries ancestors;
         uint64_t nNoLimit = std::numeric_limits<uint64_t>::max();
         std::string dummy;
