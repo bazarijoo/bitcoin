@@ -1177,20 +1177,38 @@ bool IsInitialBlockDownload()
     // Once this function has returned false, it must remain false.
     static std::atomic<bool> latchToFalse{false};
     // Optimization: pre-test latch before taking the lock.
-    if (latchToFalse.load(std::memory_order_relaxed))
-        return false;
+    if (latchToFalse.load(std::memory_order_relaxed)){
+      LogPrintf("IsInitialBlockDownload returned false due tolatchToFalse.load(std::memory_order_relaxed)");
+      return false;
+    }
+        
 
     LOCK(cs_main);
-    if (latchToFalse.load(std::memory_order_relaxed))
+    if (latchToFalse.load(std::memory_order_relaxed)){
+        LogPrintf("IsInitialBlockDownload returned false due to latchToFalse.load(std::memory_order_relaxed)");
         return false;
+    }
+        
     if (fImporting || fReindex)
-        return true;
-    if (chainActive.Tip() == nullptr)
-        return true;
-    if (chainActive.Tip()->nChainWork < nMinimumChainWork)
-        return true;
-    if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge))
-        return true;
+    {
+      LogPrintf("IsInitialBlockDownload returned true due to fImporting || fReindex");
+      return true;
+    }
+        
+    if (chainActive.Tip() == nullptr){
+      LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip() == nullptr");
+      return true;
+    }
+    if (chainActive.Tip()->nChainWork < nMinimumChainWork){
+      LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip()->nChainWork < nMinimumChainWork");
+      return true;
+    }
+        
+    if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge)){
+       LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge)");
+      return true;
+    }
+        
     LogPrintf("Leaving InitialBlockDownload (latching to false)\n");
     latchToFalse.store(true, std::memory_order_relaxed);
     return false;
