@@ -1178,34 +1178,34 @@ bool IsInitialBlockDownload()
     static std::atomic<bool> latchToFalse{false};
     // Optimization: pre-test latch before taking the lock.
     if (latchToFalse.load(std::memory_order_relaxed)){
-      LogPrintf("IsInitialBlockDownload returned false due tolatchToFalse.load(std::memory_order_relaxed)");
+      // LogPrintf("IsInitialBlockDownload returned false due tolatchToFalse.load(std::memory_order_relaxed)\n");
       return false;
     }
         
 
     LOCK(cs_main);
     if (latchToFalse.load(std::memory_order_relaxed)){
-        LogPrintf("IsInitialBlockDownload returned false due to latchToFalse.load(std::memory_order_relaxed)");
+        // LogPrintf("IsInitialBlockDownload returned false due to latchToFalse.load(std::memory_order_relaxed)\n");
         return false;
     }
         
     if (fImporting || fReindex)
     {
-      LogPrintf("IsInitialBlockDownload returned true due to fImporting || fReindex");
+      // LogPrintf("IsInitialBlockDownload returned true due to fImporting || fReindex\n");
       return true;
     }
         
     if (chainActive.Tip() == nullptr){
-      LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip() == nullptr");
+      // LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip() == nullptr\n");
       return true;
     }
     if (chainActive.Tip()->nChainWork < nMinimumChainWork){
-      LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip()->nChainWork < nMinimumChainWork");
+      // LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip()->nChainWork < nMinimumChainWork\n");
       return true;
     }
         
     if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge)){
-       LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge)");
+       // LogPrintf("IsInitialBlockDownload returned true due to chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge)\n");
       return true;
     }
         

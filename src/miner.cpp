@@ -143,6 +143,7 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     // TODO: replace this with a call to main to assess validity of a mempool
     // transaction (which in most cases can be a no-op).
     fIncludeWitness = IsWitnessEnabled(pindexPrev, chainparams.GetConsensus()) && fMineWitnessTx;
+    LogPrintf("Witness inclusion is %d\n",fIncludeWitness);
 
     int nPackagesSelected = 0;
     int nDescendantsUpdated = 0;
@@ -282,7 +283,7 @@ int BlockAssembler::UpdatePackagesForAdded(const CTxMemPool::setEntries& already
         }
     }
     std::string result = std::to_string(nDescendantsUpdated);
-    LogPrintf("nDescendantsUpdated returned %s\n",result);
+    // LogPrintf("nDescendantsUpdated returned %s\n",result);
     return nDescendantsUpdated;
 }
 
